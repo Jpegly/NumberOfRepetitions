@@ -8,52 +8,27 @@ namespace NumberOfRepetitions
 {
     internal class Algorithm
     {
-        private int _countMax = 0;
-        private string _symbolMax = string.Empty;
-        public Algorithm(Values values)
+        public Algorithm()
         {
-            CountofSymbol(values);
+
         }
 
-        public string GetCountMax
+        /// <summary>
+        /// Вычисляет символ с наибольшим количеством повторений и количество повторений
+        /// </summary>
+        public List<object> CountofSymbol(List<string> valuesList)
         {
-            get
-            {
-                return _countMax.ToString();
-            }
-        }
+            var result = valuesList.GroupBy(x => x)
+                .OrderByDescending(x => x.Count())
+                .Select(x => new { x.Key, Count = x.Count() })
+                .First();
 
-        public string GetSymbolMax
-        {
-            get
-            {
-                return _symbolMax.ToString();
-            }
-        }
+            var list = new List<object>();
+            list.Add(result.Key);
+            list.Add(result.Count);
 
-        private void CountofSymbol(Values values)
-        {
-            string symbol = values.ListValues[0];
-            int count = 0;
-
-            foreach (string value in values.ListValues)
-            {
-                if (symbol.Equals(value))
-                {
-                    count++;
-                }
-                else
-                {
-                    if (count > _countMax)
-                    {
-                        _symbolMax = symbol;
-                        _countMax = count;
-                    }
-                    count = 0;
-                    symbol = value.ToString();
-                    count++;
-                }
-            }
+            return list;
         }
     }
 }
+            

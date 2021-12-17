@@ -11,40 +11,78 @@ namespace NumberOfRepetitions
 {
     internal class Reader
     {
-        private int _countFile = 4;
-
-        public Reader(Values values)
+        public Reader()
         {
-            ReadJSON(values);
-            ReadXML(values);
+            
         }
-        private void ReadJSON(Values values)
+
+        /// <summary>
+        /// Считывание дынных с файлов
+        /// </summary>
+        public List<string> ReadFiles(List<string> listPaths)
         {
-            for (int i = 1; i < _countFile; i++)
+            List<string> valuesList = new List<string>();
+            List<string> pathListXML = new List<string>();
+            List<string> pathListJSON = new List<string>();
+
+            foreach (string path in listPaths)
             {
-                var obj = JObject.Parse(File.ReadAllText($"D:\\TestTask\\Files\\file_{_countFile}.json"));
+                switch (Path.GetExtension(path))
+                {
+                    case ".xml":
+                        pathListXML.Add(path);
+                        break;
+                    case ".json":
+                        pathListJSON.Add(path);
+                        break;
+                }
+            }
+            valuesList.AddRange(ReadXML(pathListXML));
+            valuesList.AddRange(ReadJSON(pathListJSON));
+
+            return valuesList;
+        }
+
+        /// <summary>
+        /// Считывание данных из файла с расширением .JSON
+        /// </summary>
+        private List<string> ReadJSON(List<string> listPaths)
+        {
+            List<string> valuesJSON = new List<string>();
+
+            foreach (string path in listPaths)
+            {
                 try
                 {
+                    var obj = JObject.Parse(File.ReadAllText(path));
                     foreach (var element in obj)
                     {
                         foreach (var v in element.Value)
                         {
-                            values.ListValues.Add(v.ToString());
+                            valuesJSON.Add(v.ToString());
                         }
                     }
                 }
-                catch { }
+                catch
+                { throw new ArgumentException("Файл не содержит данных!"); }
+                
             }
+            return valuesJSON;
         }
 
-        private void ReadXML(Values values)
+        /// <summary>
+        /// Считывание данных из файла с расширением .XML
+        /// </summary>
+        private List<string> ReadXML(List<string> listPaths)
         {
-            for (int i = 1; i < _countFile; i++)
+            List<string> valuesXML = new List<string>();
+
+            foreach(var path in listPaths)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load($"D:\\TestTask\\Files\\file_{_countFile}.xml");
                 try
                 {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(path);
                     XmlElement elements = doc.DocumentElement;
 
                     foreach (XmlElement element in elements)
@@ -53,12 +91,14 @@ namespace NumberOfRepetitions
                         {
                             if (childnode.Name == "Value")
                             {
-                                values.ListValues.Add(childnode.InnerText);
+                                valuesXML.Add(childnode.InnerText);
                             }
                         }
                     }
-                }catch { }
+                }
+                catch { throw new ArgumentException("Файл не содержит данных!"); }
             }
+            return valuesXML;
         }
     }
 }

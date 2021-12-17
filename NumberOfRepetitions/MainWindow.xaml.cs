@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,16 +24,42 @@ namespace NumberOfRepetitions
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new CalculationViewModel();
+            btnCalculate.IsEnabled = false;
         }
 
-        private void btnStart_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Открытие файла
+        /// </summary>
+        private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            Values values = new();
-            Reader reader = new(values);
-            Algorithm alg = new(values);
+            var ofd = new OpenFileDialog { Filter = "Файлы|*.xml;*.json", Multiselect = true };
+            if (ofd.ShowDialog() == true)
+            {
+                ((CalculationViewModel)DataContext).Paths.Clear();
 
-            txtCount.Text = alg.GetCountMax;
-            txtSymbol.Text = alg.GetSymbolMax;
+                foreach (var item in ofd.FileNames)
+                {
+                    ((CalculationViewModel)DataContext).Paths.Add(item);
+
+                }
+                btnCalculate.IsEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Вычисление количества повторяемого символа
+        /// </summary>
+        private void btnCalculate_Click(object sender, RoutedEventArgs e)
+        {
+             try
+             {
+                 ((CalculationViewModel)DataContext).Calculation();
+             }
+             catch(Exception ex)
+             {
+                 MessageBox.Show(ex.Message);
+             }
         }
     }
 }

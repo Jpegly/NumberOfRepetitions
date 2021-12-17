@@ -3,15 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NumberOfRepetitions"
+        xmlns:local="clr-namespace:NumberOfRepetitions" d:DataContext="{d:DesignInstance Type=local:CalculationViewModel}"
         mc:Ignorable="d"
         Title="Number of Repetitions" Height="300" Width="200" ResizeMode="NoResize" WindowStyle="ToolWindow">
     <Grid>
-        <Label Content="Символ" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="156"/>
-        <TextBox x:Name="txtSymbol" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsReadOnly="True" HorizontalAlignment="Center" Margin="0,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Количество" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,91,0,0" VerticalAlignment="Top" Width="156"/>
-        <TextBox x:Name="txtCount" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsReadOnly="True" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120"/>
-        <Button x:Name="btnStart" BorderBrush="Black" Content="Старт" HorizontalAlignment="Center" Margin="0,191,0,0" VerticalAlignment="Top" Width="84" Click="btnStart_Click"/>
+        <ToolBar HorizontalAlignment="Center" Height="30" Margin="0,18,0,0" VerticalAlignment="Top" Width="180">
+            <Button x:Name="btnOpen" Content="Открыть" Click="btnOpen_Click"></Button>
+            <Button x:Name="btnCalculate" Content="Вычислить" Click="btnCalculate_Click"></Button>
+        </ToolBar>
+        <TextBox Text="{Binding Path=Symbol, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="21" Margin="0,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
+        <TextBox Text="{Binding Path=Count, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64" Height="21"/>
+        <Label Content="Символ:" HorizontalAlignment="Center" Height="24" Margin="0,86,0,0" VerticalAlignment="Top" Width="64"/>
+        <Label Content="Количество повторений:" HorizontalAlignment="Center" Margin="0,146,0,0" VerticalAlignment="Top" Width="148" Height="24"/>
+
 
     </Grid>
 </Window>
